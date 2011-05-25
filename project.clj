@@ -2,4 +2,5 @@
   :description "Just conways game of life in clojure"
   :dependencies [[org.clojure/clojure "1.2.1"]]
   :dev-dependencies [[org.clojars.autre/lein-vimclojure "1.0.0"]
-                     [lein-vim "1.0.1-SNAPSHOT"]])
+                     [lein-vim "1.0.1-SNAPSHOT"]]
+  :main conway.core)
