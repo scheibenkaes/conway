@@ -1,4 +1,5 @@
-(ns conway.world)
+(ns conway.world
+  (:use clojure.set))
 
 (def *bounds* [100 100])
 
@@ -21,9 +22,10 @@
         right (inc x)
         above (dec y)
         below (inc y)]
-    [[left above] [x above] [right above]
-     [left y]     #_[x y]   [right y]
-     [left below] [x below] [right below]]))
+    (set 
+      [[left above] [x above] [right above]
+       [left y]     #_[x y]   [right y]
+       [left below] [x below] [right below]])))
 
 (defn in-bounds? [[x y] [width height]]
   (and
@@ -31,3 +33,27 @@
     (pos? y)
     (<= x width)
     (<= y height)))
+
+(defn neighbors-in-bounds [pos bounds] 
+  (set (filter #(in-bounds? % bounds) (neighbors pos))))
+
+(defn dead-next-round? [pos living-neighbors]
+  (let [cnt-living-neighbors (count living-neighbors)]
+    (cond  
+      (< cnt-living-neighbors 2) true
+      (> cnt-living-neighbors 3) true
+      :default false)))
+
+(defn stays-alive? [pos living-neighbors]
+  (let [cnt-living-neighbors (count living-neighbors)] 
+    (if (or (= 2 cnt-living-neighbors) (= 3 cnt-living-neighbors)) true false)))
+
+(defn alive-next-round? [pos living]
+  (let [living? (contains? living pos)
+        neighbor-cells (neighbors-in-bounds pos *bounds*)
+        living-neighbors (intersection neighbor-cells living)]
+    (if living?
+      (dead-next-round? pos living-neighbors)
+      (stays-alive? pos living-neighbors))))
+
+
