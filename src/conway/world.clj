@@ -24,3 +24,10 @@
     [[left above] [x above] [right above]
      [left y]     #_[x y]   [right y]
      [left below] [x below] [right below]]))
+
+(defn in-bounds? [[x y] [width height]]
+  (and
+    (pos? x)
+    (pos? y)
+    (<= x width)
+    (<= y height)))

@@ -20,3 +20,10 @@
                          [0 1] #_[1 1] [2 1]
                          [0 2] [1 2] [2 2]]]
            (is (= expected (neighbors [1 1])))))
+
+(deftest in-bounds?-test 
+         (are [exp defs] (exp (apply in-bounds? defs))
+              true? [[1 1] [10 10]]
+              true? [[10 10] [10 10]]
+              false? [[0 1] [10 10]]
+              false? [[11 10] [10 10]]))
