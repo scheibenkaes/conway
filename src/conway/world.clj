@@ -8,7 +8,7 @@
 
 (defn n-unique-positions 
   ([n] (n-unique-positions n #{}))
-  ([n poss] (if (= n (count poss)) poss (n-unique-positions n (conj poss (rand-pos))))))
+  ([n poss] (if (= n (count poss)) poss (recur n (conj poss (rand-pos))))))
 
 (defn generate-rand-world
   ([bounds] (generate-rand-world bounds (inc (rand-int 50))))
