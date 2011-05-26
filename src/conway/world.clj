@@ -35,16 +35,16 @@
     (<= y height)))
 
 (defn neighbors-in-bounds [pos bounds] 
-  (set (filter #(in-bounds? % bounds) (neighbors pos))))
+  (select #(in-bounds? % bounds) (neighbors pos)))
 
-(defn dead-next-round? [pos living-neighbors]
+(defn dead-next-round? [living-neighbors]
   (let [cnt-living-neighbors (count living-neighbors)]
     (cond  
       (< cnt-living-neighbors 2) true
       (> cnt-living-neighbors 3) true
       :default false)))
 
-(defn stays-alive? [pos living-neighbors]
+(defn stays-alive? [living-neighbors]
   (let [cnt-living-neighbors (count living-neighbors)] 
     (if (or (= 2 cnt-living-neighbors) (= 3 cnt-living-neighbors)) true false)))
 
@@ -53,7 +53,7 @@
         neighbor-cells (neighbors-in-bounds pos *bounds*)
         living-neighbors (intersection neighbor-cells living)]
     (if living?
-      (dead-next-round? pos living-neighbors)
-      (stays-alive? pos living-neighbors))))
+      (not (dead-next-round? living-neighbors))
+      (stays-alive? living-neighbors))))
 
 

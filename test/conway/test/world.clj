@@ -1,4 +1,5 @@
 (ns conway.test.world
+  (:use clojure.contrib.trace)
   (:use conway.world)
   (:use clojure.test))
 
@@ -35,9 +36,18 @@
               5 [1 2]
               8 [5 5]))
 
-(deftest alive-next-round?-test 
+(deftest alive-next-round?-test-with-a-dead-cell
          (are [exp values] (exp (apply alive-next-round? values))
               true? [[2 2] #{[1 3] [2 3] [3 3]}]
               false? [[2 2] #{[1 1]}]
               true? [[2 2] #{[1 2] [2 3] [3 3]}]
               false? [[2 2] #{[1 2] [2 3] [3 3] [1 3]}]))
+
+(deftest alive-next-round?-test-with-a-living-cell
+         (are [exp values] (exp (apply alive-next-round? values))
+              true? [[2 2] #{[1 3] [2 2] [2 3] [3 3]}]
+              false? [[2 2] #{[1 1] [2 2]}]
+              true? [[2 2] #{[1 2] [2 2] [3 3]}]
+              true? [[2 2] #{[1 2] [2 2] [2 3][3 3]}]
+              false? [[2 2] #{[1 2] [2 2] [2 3][3 3] [1 3]}]))
+
