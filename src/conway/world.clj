@@ -15,3 +15,12 @@
    (let [num-cells (* width height)
          len (int (* percentage (/ num-cells 100)))]
      (n-unique-positions len))))
+
+(defn neighbors [[x y]] 
+  (let [left (dec x)
+        right (inc x)
+        above (dec y)
+        below (inc y)]
+    [[left above] [x above] [right above]
+     [left y]     #_[x y]   [right y]
+     [left below] [x below] [right below]]))

@@ -11,3 +11,12 @@
 
 (deftest generate-rand-world-len
          (is (= (count (generate-rand-world [10 10] 10)) 10)))
+
+(deftest neighbors-test
+         (is (= 8 (count (neighbors [1 1])))))
+
+(deftest neighbors-test-for-positions 
+         (let [expected [[0 0] [1 0] [2 0]
+                         [0 1] #_[1 1] [2 1]
+                         [0 2] [1 2] [2 2]]]
+           (is (= expected (neighbors [1 1])))))
