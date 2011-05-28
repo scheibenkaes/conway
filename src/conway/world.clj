@@ -11,7 +11,7 @@
   ([n poss] (if (= n (count poss)) poss (recur n (conj poss (rand-pos))))))
 
 (defn generate-rand-world
-  ([bounds] (generate-rand-world bounds (inc (rand-int 50))))
+  ([] (generate-rand-world *bounds* (inc (rand-int 50))))
   ([[width height] percentage]
    (let [num-cells (* width height)
          len (int (* percentage (/ num-cells 100)))]
@@ -35,8 +35,8 @@
     (<= x width)
     (<= y height)))
 
-(defn neighbors-in-bounds [pos bounds] 
-  (select #(in-bounds? % bounds) (neighbors pos)))
+(defn neighbors-in-bounds [pos] 
+  (select #(in-bounds? % *bounds*) (neighbors pos)))
 
 (defn dead-next-round? [living-neighbors]
   (let [cnt-living-neighbors (count living-neighbors)]
@@ -51,7 +51,7 @@
 
 (defn alive-next-round? [pos living]
   (let [living? (contains? living pos)
-        neighbor-cells (neighbors-in-bounds pos *bounds*)
+        neighbor-cells (neighbors-in-bounds pos)
         living-neighbors (intersection neighbor-cells living)]
     (if living?
       (not (dead-next-round? living-neighbors))

@@ -30,7 +30,7 @@
               false? [[11 10] [10 10]]))
 
 (deftest neighbors-in-bounds-test
-         (are [cnt pos] (= cnt (count (neighbors-in-bounds pos [10 10])))
+         (are [cnt pos] (= cnt (count (neighbors-in-bounds pos)))
               3 [1 1]
               5 [2 1]
               5 [1 2]
