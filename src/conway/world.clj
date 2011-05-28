@@ -3,6 +3,10 @@
 
 (def *bounds* [100 100])
 
+(defn whole-world [] 
+  (let [[width height] *bounds*]
+    (set (for [x (range 1 (inc width)) y (range 1 (inc height))] [x y]))))
+
 (defn rand-pos [] 
   [(rand-int (inc (*bounds* 0))) (rand-int (inc (*bounds* 1)))])
 

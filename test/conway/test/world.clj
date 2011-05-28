@@ -16,6 +16,10 @@
 (deftest neighbors-test
          (is (= 8 (count (neighbors [1 1])))))
 
+(deftest whole-world-test 
+         (let [ww (whole-world)]
+           (is (= (count ww) (* (*bounds* 0) (*bounds* 1))))))
+
 (deftest neighbors-test-for-positions 
          (let [expected [[0 0] [1 0] [2 0]
                          [0 1] #_[1 1] [2 1]
