@@ -71,8 +71,8 @@
       (invoke-later 
         (frame 
           :title "Conway" 
-          :width 640
-          :height 480
+          :width 800
+          :height 600
           :pack? false
           :on-close :exit
           :visible? true
