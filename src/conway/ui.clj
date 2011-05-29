@@ -37,16 +37,20 @@
             (button :text "Stop")
             "Width" (text :text "10") "Height" (text :text "10")]))
 
+(def cell-size 5)
+
 (defn paint-world [c g] 
   (let [[world-w world-h] *bounds*
         w (.getWidth c)
         h (.getHeight c)]
     (doseq [[x y] (whole-world)]
       (let [living? (contains? @current-world [x y])
-            col (if living? living-color dead-color)]
+            col (if living? living-color dead-color)
+            c-x (* cell-size (dec x))
+            c-y (* cell-size (dec y))]
         (draw g
-              (rect (dec x) (dec y) 1 1)
-              (style :foreground col))))))
+              (rect c-x c-y cell-size cell-size)
+              (style :background col))))))
 
 (def canvas-element
   (canvas :id :canvas :paint paint-world)) 
