@@ -1,6 +1,10 @@
 (ns conway.ui
   (:use conway.world)
-  (:use [seesaw core]))
+  (:use [seesaw core color graphics]))
+
+(def dead-color (color 200 0 0))
+
+(def living-color (color 0 155 0))
 
 (def buttons
   (horizontal-panel
@@ -8,12 +12,24 @@
             (button :text "Stop")
             "Width" (text :text "10") "Height" (text :text "10")]))
 
+(defn paint-world [c g] 
+  (let [[world-w world-h] *bounds*
+        w (.getWidth c)
+        h (.getHeight c)]
+    (doseq [[x y] (whole-world)]
+      (draw g
+            (rect (dec x) (dec y) 2 2)
+            (style :foreground (color 120 0 0))))))
+
 (def canvas-element
-  (vertical-panel :items [(canvas :id :canvas :paint nil)]))
+  (let [[w h] *bounds*
+        c (canvas :id :canvas :paint paint-world)] 
+    (vertical-panel :items [c])))
 
 (def main-content 
-  (vertical-panel
-    :items [buttons canvas-element]))
+  (border-panel
+    :north buttons
+    :center canvas-element))
 
 (defn start-ui [] 
   (do
@@ -23,7 +39,7 @@
         :title "Conway" 
         :width 640
         :height 480
-        :pack? true
+        :pack? false
         :on-close :exit
         :visible? true
         :content main-content))))
