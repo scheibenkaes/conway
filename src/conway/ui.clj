@@ -11,7 +11,11 @@
 (declare canvas-element)
 
 (defn tick-loop [] 
-  (swap! current-world tick))
+  (when @running
+    (do
+      (swap! current-world tick)
+      (Thread/sleep tick-speed)
+      (recur))))
 
 (def dead-color (color 200 0 0))
 
@@ -24,7 +28,8 @@
                        (do 
                          (reset! current-world (generate-rand-world))
                          (reset! running true)
-                         (tick-loop))))))
+                         (let [thread (Thread. tick-loop)]
+                           (.start thread)))))))
 
 (def buttons
   (horizontal-panel
@@ -37,9 +42,11 @@
         w (.getWidth c)
         h (.getHeight c)]
     (doseq [[x y] (whole-world)]
-      (draw g
-            (rect (dec x) (dec y) 1 1)
-            (style :foreground dead-color)))))
+      (let [living? (contains? @current-world [x y])
+            col (if living? living-color dead-color)]
+        (draw g
+              (rect (dec x) (dec y) 1 1)
+              (style :foreground col))))))
 
 (def canvas-element
   (canvas :id :canvas :paint paint-world)) 
@@ -50,7 +57,7 @@
     :center canvas-element))
 
 (defn start-ui [] 
-  (let [t (timer (fn [e] (repaint! canvas-element)) :delay tick-speed)]
+  (let [t (timer (fn [e] (repaint! canvas-element)) :delay tick-speed) ]
     (do
       (native!)
       (invoke-later 
