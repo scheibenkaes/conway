@@ -31,10 +31,13 @@
                          (let [thread (Thread. tick-loop)]
                            (.start thread)))))))
 
+(def stop-action 
+  (action :name "Stop" :handler (fn [& _] (reset! running false))))
+
 (def buttons
   (horizontal-panel
     :items [start-action
-            (button :text "Stop")
+            stop-action
             "Width" (text :text "10") "Height" (text :text "10")]))
 
 (def cell-size 5)
@@ -42,9 +45,10 @@
 (defn paint-world [c g] 
   (let [[world-w world-h] *bounds*
         w (.getWidth c)
-        h (.getHeight c)]
+        h (.getHeight c)
+        wrld @current-world]
     (doseq [[x y] (whole-world)]
-      (let [living? (contains? @current-world [x y])
+      (let [living? (contains? wrld [x y])
             col (if living? living-color dead-color)
             c-x (* cell-size (dec x))
             c-y (* cell-size (dec y))]
@@ -61,7 +65,7 @@
     :center canvas-element))
 
 (defn start-ui [] 
-  (let [t (timer (fn [e] (repaint! canvas-element)) :delay tick-speed) ]
+  (let [t (timer (fn [e] (repaint! canvas-element)) :delay (/ tick-speed 2)) ]
     (do
       (native!)
       (invoke-later 
