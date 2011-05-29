@@ -5,7 +5,7 @@
 
 (defn whole-world [] 
   (let [[width height] *bounds*]
-    (set (for [x (range 1 (inc width)) y (range 1 (inc height))] [x y]))))
+    (for [x (range 1 (inc width)) y (range 1 (inc height))] [x y])))
 
 (defn rand-pos [] 
   [(rand-int (inc (*bounds* 0))) (rand-int (inc (*bounds* 1)))])
@@ -42,23 +42,30 @@
 (defn neighbors-in-bounds [pos] 
   (select #(in-bounds? % *bounds*) (neighbors pos)))
 
-(defn dead-next-round? [living-neighbors]
-  (let [cnt-living-neighbors (count living-neighbors)]
-    (cond  
-      (< cnt-living-neighbors 2) true
-      (> cnt-living-neighbors 3) true
-      :default false)))
+(defn tick-living [num-living-neighbors]
+  (cond 
+    (< num-living-neighbors 2) false
+    (or (= num-living-neighbors 2) (= num-living-neighbors 3)) true
+    (> num-living-neighbors 3) false))
 
-(defn stays-alive? [living-neighbors]
-  (let [cnt-living-neighbors (count living-neighbors)] 
-    (if (or (= 2 cnt-living-neighbors) (= 3 cnt-living-neighbors)) true false)))
+(defn tick-dead [num-living-neighbors]
+  (= num-living-neighbors 3))
 
 (defn alive-next-round? [pos living]
   (let [living? (contains? living pos)
         neighbor-cells (neighbors-in-bounds pos)
-        living-neighbors (intersection neighbor-cells living)]
+        living-neighbors (intersection neighbor-cells living)
+        num-living-neighbors (count living-neighbors)]
     (if living?
-      (not (dead-next-round? living-neighbors))
-      (stays-alive? living-neighbors))))
+      (tick-living num-living-neighbors)
+      (tick-dead num-living-neighbors))))
 
+(defn tick
+  "Given a set of living cells - represented by a vector of two numbers - 
+  returns a set of the cells alive after a tick."
+  [living] 
+  (assert (set? living))
+  (set 
+    (filter
+      #(alive-next-round? % living) (whole-world))))
 

@@ -55,3 +55,11 @@
               true? [[2 2] #{[1 2] [2 2] [2 3][3 3]}]
               false? [[2 2] #{[1 2] [2 2] [2 3][3 3] [1 3]}]))
 
+(deftest tick-test 
+         (binding [*bounds* [3 3]]
+           (let [living #{[1 1] [2 1] [1 2] [2 2]}
+                 after-tick (tick living)]
+             (is (= living after-tick)))))
+
+(deftest tick-asserts-a-set
+         (is (thrown? AssertionError (tick []))))
