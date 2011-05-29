@@ -61,5 +61,18 @@
                  after-tick (tick living)]
              (is (= living after-tick)))))
 
+(deftest tick-test-static
+         (binding [*bounds* [3 3]]
+           (let [living #{[2 1] [1 2] [3 2] [2 3]}
+                 after-tick (tick living)]
+             (is (= living after-tick)))))
+
+(deftest tick-test-blinker
+         (binding [*bounds* [3 3]]
+           (let [living #{[2 1] [2 2] [2 3]}
+                 expected #{[1 2] [2 2] [3 2]}
+                 after-tick (tick living)]
+             (is (= expected after-tick)))))
+
 (deftest tick-asserts-a-set
          (is (thrown? AssertionError (tick []))))
