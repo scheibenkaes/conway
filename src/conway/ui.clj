@@ -88,5 +88,6 @@
           :pack? true
           :on-close :exit
           :visible? true
+          :resizable? false
           :content main-content)))))
 
