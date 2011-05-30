@@ -34,11 +34,19 @@
 (def stop-action 
   (action :name "Stop" :handler (fn [& _] (reset! running false))))
 
+(def start-stop-button 
+  (button :text "Start" :action start-action))
+
 (def buttons
   (horizontal-panel
-    :items [start-action
-            stop-action
+    :items [start-stop-button
             "Width" (text :text "10") "Height" (text :text "10")]))
+
+(defn toggle-start-stop-action [] 
+  (config! start-stop-button :action (if @running stop-action start-action)))
+
+(defn on-running-changed [& _] 
+  (toggle-start-stop-action))
 
 (def cell-size 5)
 
@@ -69,6 +77,7 @@
   (let [t (timer (fn [e] (repaint! canvas-element)) :delay (/ tick-speed 2)) ]
     (do
       (native!)
+      (add-watch running :running on-running-changed)
       (invoke-later 
         (frame 
           :title "Conway" 
