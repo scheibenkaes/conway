@@ -5,4 +5,5 @@
                  [seesaw "1.0.3"]]
   :dev-dependencies [[org.clojars.autre/lein-vimclojure "1.0.0"]
                      [lein-vim "1.0.1-SNAPSHOT"]]
+  :aot [conway.applet]
   :main conway.core)
