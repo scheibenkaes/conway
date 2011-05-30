@@ -39,7 +39,7 @@
 
 (def buttons
   (mig-panel
-    :constraints ["debug, ins 0 0 0 0" "[left][][grow][][grow]"]
+    :constraints ["ins 0 0 0 0" "[left][][grow][][grow]"]
     :items [[start-stop-button ""]
             ["Width"  ""]
             [(text :text (str (*bounds* 0)) :editable? false) "growx"]
