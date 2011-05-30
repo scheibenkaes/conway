@@ -60,9 +60,10 @@
   (canvas :id :canvas :paint paint-world)) 
 
 (def main-content 
-  (border-panel
-    :north buttons
-    :center canvas-element))
+  (mig-panel 
+    :constraints []
+    :items [[buttons "span, wrap"]
+            [canvas-element "width 500!, height 500!"]]))
 
 (defn start-ui [] 
   (let [t (timer (fn [e] (repaint! canvas-element)) :delay (/ tick-speed 2)) ]
@@ -71,9 +72,7 @@
       (invoke-later 
         (frame 
           :title "Conway" 
-          :width 800
-          :height 600
-          :pack? false
+          :pack? true
           :on-close :exit
           :visible? true
           :content main-content)))))

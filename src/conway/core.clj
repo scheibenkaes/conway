@@ -1,6 +1,6 @@
 (ns conway.core
   (:use conway.ui)
-  (:use conway.world))
+  (:gen-class))
 
 (defn -main [& args] 
   (start-ui))
