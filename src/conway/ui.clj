@@ -38,9 +38,13 @@
   (button :text "Start" :action start-action))
 
 (def buttons
-  (horizontal-panel
-    :items [start-stop-button
-            "Width" (text :text "10") "Height" (text :text "10")]))
+  (mig-panel
+    :constraints ["debug, ins 0 0 0 0" "[left][][grow][][grow]"]
+    :items [[start-stop-button ""]
+            ["Width"  ""]
+            [(text :text (str (*bounds* 0)) :editable? false) "growx"]
+            ["Height" ""]
+            [(text :text (str (*bounds* 1)) :editable? false) "growx"]]))
 
 (defn toggle-start-stop-action [] 
   (config! start-stop-button :action (if @running stop-action start-action)))
@@ -70,7 +74,7 @@
 (def main-content 
   (mig-panel 
     :constraints []
-    :items [[buttons "span, wrap"]
+    :items [[buttons "growx, wrap"]
             [canvas-element "width 500!, height 500!"]]))
 
 (defn start-ui [] 
