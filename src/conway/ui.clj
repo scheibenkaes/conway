@@ -77,17 +77,20 @@
     :items [[buttons "growx, wrap"]
             [canvas-element "width 500!, height 500!"]]))
 
+(defn on-world-changed [& _] 
+  (invoke-later (repaint! canvas-element)))
+
 (defn start-ui [] 
-  (let [t (timer (fn [e] (repaint! canvas-element)) :delay (/ tick-speed 2)) ]
-    (do
-      (native!)
-      (add-watch running :running on-running-changed)
-      (invoke-later 
-        (frame 
-          :title "Conway" 
-          :pack? true
-          :on-close :exit
-          :visible? true
-          :resizable? false
-          :content main-content)))))
+  (do
+    (native!)
+    (add-watch running :running on-running-changed)
+    (add-watch current-world :curworld on-world-changed)
+    (invoke-later 
+      (frame 
+        :title "Conway" 
+        :pack? true
+        :on-close :exit
+        :visible? true
+        :resizable? false
+        :content main-content))))
 

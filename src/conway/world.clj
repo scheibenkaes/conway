@@ -21,16 +21,15 @@
          len (int (* percentage (/ num-cells 100)))]
      (n-unique-positions len))))
 
-(def neighbors 
-  (memoize (fn [[x y]]
-             (let [left (dec x)
-                   right (inc x)
-                   above (dec y)
-                   below (inc y)]
-               (set 
-                 [[left above] [x above] [right above]
-                  [left y]     #_[x y]   [right y]
-                  [left below] [x below] [right below]])))))
+(defn neighbors [[x y]]
+  (let [left (dec x)
+        right (inc x)
+        above (dec y)
+        below (inc y)]
+    (set 
+      [[left above] [x above] [right above]
+       [left y]     #_[x y]   [right y]
+       [left below] [x below] [right below]])))
 
 (defn in-bounds? [[x y] [width height]]
   (and
