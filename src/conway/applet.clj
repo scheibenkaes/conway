@@ -3,5 +3,6 @@
   (:gen-class :extends javax.swing.JApplet))
 
 (defn -init [this] 
-  (invoke-later (.. this getContentPane (add main-content))))
+  (let [content (doto (main-content) (.setVisible true))]
+    (invoke-later (.. this getContentPane (add content)))))
 
